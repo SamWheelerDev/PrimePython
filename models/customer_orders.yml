@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: customer_orders
+    description: >
+      A core model that represents customers and their order history.
+      This table contains one row per customer with aggregated order metrics.
+    config:
+      tags: ['daily', 'customers']
+    
+    columns:
+      - name: customer_id
+        description: Unique identifier for each customer
+        tests:
+          - unique
+          - not_null
+      
+      - name: first_name
+        description: Customer's first name
+        tests:
+          - not_null
+      
+      - name: last_name
+        description: Customer's last name
+        tests:
+          - not_null
+      
+      - name: email
+        description: Customer's email address
+        tests:
+          - not_null
+          - unique
+      
+      - name: first_order_date
+        description: Date of customer's first order
+        tests:
+          - not_null:
+              where: "number_of_orders > 0"
+      
+      - name: most_recent_order_date
+        description: Date of customer's most recent order
+        tests:
+          - not_null:
+              where: "number_of_orders > 0"
+          - dbt_utils.expression_is_true:
+              expression: "most_recent_order_date >= first_order_date"
+      
+      - name: number_of_orders
+        description: Total number of orders placed by the customer
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "number_of_orders >= 0"
+      
+      - name: lifetime_value
+        description: Total amount spent by the customer across all orders
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "lifetime_value >= 0 OR lifetime_value IS NULL"
+    
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "number_of_orders > 0 OR (first_order_date IS NULL AND most_recent_order_date IS NULL)"
