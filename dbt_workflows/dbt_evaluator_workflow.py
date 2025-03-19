@@ -17,7 +17,7 @@ console = Console()
 app = MCPApp(name="dbt_project_reviewer")
 
 
-class DBTProjectReviewer:
+class DBT_Evaluator:
     """
     A class to review an entire DBT project by analyzing all models
     and their documentation using specialized agents.
@@ -369,7 +369,7 @@ async def main():
     args = parser.parse_args()
 
     # Create the reviewer
-    reviewer = DBTProjectReviewer(args.models_dir, args.output_dir)
+    reviewer = DBT_Evaluator(args.models_dir, args.output_dir)
 
     # Run the review
     async with app.run():

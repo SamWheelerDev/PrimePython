@@ -12,7 +12,7 @@ from mcp_agent.workflows.parallel.parallel_llm import ParallelLLM
 console = Console()
 
 
-class DBTModelOptimizer:
+class DBT_Optimizer:
     """
     A class to analyze DBT model review reports, suggest and implement optimizations,
     and evaluate the results against the original issues.

@@ -1,8 +1,8 @@
 import argparse
 import asyncio
 
-from automations.dbt_advanced_review_workflow import DBTModelOptimizer
-from automations.dbt_project_review_workflow import DBTProjectReviewer
+from dbt_workflows.dbt_evaluator_workflow import DBT_Evaluator
+from dbt_workflows.dbt_optimizer_workflow import DBT_Optimizer
 from mcp_agent import app, console
 
 
@@ -35,7 +35,7 @@ async def main():
     args = parser.parse_args()
 
     # Create the reviewer
-    reviewer = DBTProjectReviewer(args.models_dir, args.review_dir)
+    reviewer = DBT_Evaluator(args.models_dir, args.review_dir)
 
     # Run the review and optimization
     async with app.run():
@@ -47,7 +47,7 @@ async def main():
             console.print(
                 "[bold blue]Starting model optimization process...[/bold blue]"
             )
-            optimizer = DBTModelOptimizer(reviewer, args.optimization_dir)
+            optimizer = DBT_Optimizer(reviewer, args.optimization_dir)
             await optimizer.optimize_all_models()
 
 
